@@ -21,7 +21,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<choice doc:name="Choice" doc:id="9c8af25a-234a-4d4b-8ee6-f3cf8ee7285d" >
 			<when expression="#[sizeOf(payload) == 0]">
 				<raise-error doc:name="Raise error" doc:id="7a8598d5-ea53-4760-8442-41e0dfb37f74" type="ACCOUNT:NOT_FOUND" description="Customer not found with the provided email ID"/>
-				<logger level="INFO" doc:name="Logger" doc:id="4b22e02d-1bd4-4d69-935e-f718cec1af14" />
+				<logger level="INFO" doc:name="Logger" doc:id="4b22e02d-1bd4-4d69-935e-f718cec1af14" message="No Customer found with the given email ID"/>
 			</when>
 			<otherwise >
 				<ee:transform doc:name="Transform Message" doc:id="21b5656b-55f4-4f14-85b6-cb08de43e0be">
@@ -34,11 +34,6 @@ payload]]></ee:set-payload>
 		</ee:transform>
 			</otherwise>
 		</choice>
-		<logger level="INFO" doc:name="Logger" doc:id="53e9f200-a886-4927-a94c-511452031e76" />
-		<error-handler >
-			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="01297661-da48-4642-9f96-7e92a860475a" type="STREAM_MAXIMUM_SIZE_EXCEEDED">
-				<logger level="INFO" doc:name="Logger" doc:id="9aff4b2e-85ba-4810-9f3e-6fccae579f6d" />
-			</on-error-continue>
-		</error-handler>
+		<logger level="INFO" doc:name="Logger" doc:id="53e9f200-a886-4927-a94c-511452031e76" message="#[payload]"/>
 	</flow>
 </mule>

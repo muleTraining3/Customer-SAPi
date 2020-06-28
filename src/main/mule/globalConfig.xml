@@ -3,5 +3,4 @@
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
-	<configuration doc:name="Configuration" doc:id="cbb0876f-792d-4067-9a44-a54d570fc15b" defaultErrorHandler-ref="ErrorHandlingError_Handler" />
 </mule>
