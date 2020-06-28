@@ -38,6 +38,7 @@ payload]]></ee:set-payload>
 		<error-handler >
 			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="01297661-da48-4642-9f96-7e92a860475a" type="STREAM_MAXIMUM_SIZE_EXCEEDED">
 				<logger level="INFO" doc:name="Logger" doc:id="51c85171-08b4-4dff-ba66-79bf95ca764e" message="Exception handled"/>
+				<logger level="INFO" doc:name="Logger" doc:id="9aff4b2e-85ba-4810-9f3e-6fccae579f6d" />
 			</on-error-continue>
 		</error-handler>
 	</flow>
