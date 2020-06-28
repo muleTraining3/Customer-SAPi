@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="25089185-b3eb-42ee-9a42-6c4b6832d0b5" >
+		<db:mssql-connection host="den1.mssql6.gear.host" port="1433" user="customer4" password="Ff4B!!8P901h" />
+	</db:config>
+	<flow name="ImplementationFlow" doc:id="110be77e-5cac-4b69-9218-6d7993a43ec6" >
+		<http:listener doc:name="Listener" doc:id="a2d159d9-b625-44b4-9f46-09465083b6ce" config-ref="customer-httpListenerConfig" path="/abc"/>
+		<db:select doc:name="Select" doc:id="a8c4a549-00e6-405f-a47f-6b7a54497b89" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from customer where emailID='sreejaya007@gmail.com';
+]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+'emailID': "attributes.queryparams.emailID"
+}]]]></db:input-parameters>
+		</db:select>
+		<choice doc:name="Choice" doc:id="9c8af25a-234a-4d4b-8ee6-f3cf8ee7285d" >
+			<when expression="#[sizeOf(payload) == 0]">
+				<raise-error doc:name="Raise error" doc:id="7a8598d5-ea53-4760-8442-41e0dfb37f74" type="ACCOUNT:NOT_FOUND" description="Customer not found with the provided email ID"/>
+				<logger level="INFO" doc:name="Logger" doc:id="4b22e02d-1bd4-4d69-935e-f718cec1af14" />
+			</when>
+			<otherwise >
+				<ee:transform doc:name="Transform Message" doc:id="21b5656b-55f4-4f14-85b6-cb08de43e0be">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="53e9f200-a886-4927-a94c-511452031e76" />
+		<error-handler >
+			<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="01297661-da48-4642-9f96-7e92a860475a" type="STREAM_MAXIMUM_SIZE_EXCEEDED">
+				<logger level="INFO" doc:name="Logger" doc:id="51c85171-08b4-4dff-ba66-79bf95ca764e" message="Exception handled"/>
+			</on-error-continue>
+		</error-handler>
+	</flow>
+</mule>

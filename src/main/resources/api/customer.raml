@@ -1,0 +1,69 @@
+#%RAML 1.0
+baseUri: https://anypoint.mulesoft.com/mocking/api/v1/links/cad36f05-ffcd-4102-996c-9103a80c2ea6/ # 
+title: Customer System API
+types:
+  customerType: !include types/customerType.raml
+  errorResponse: !include types/errorResponseType.raml
+  successResponse: !include types/successResponse.raml
+
+traits: 
+ logging: !include traits/logging.raml
+ clientId-enforcement: !include traits/security.raml
+ errorTraits: !include traits/error-trait.raml
+  
+   
+/customers:
+  get:
+    displayName: get customer details based on email Id
+    description: get customer details based on email Id
+    is: [logging, clientId-enforcement,errorTraits]
+    queryParameters:
+      emailId:
+        example: Example
+        type: string
+    responses:
+      "200":
+        body:
+          application/json:
+            type: customerType
+            example: !include examples/customerExample.raml
+              
+  post:
+    displayName: Create New Customer
+    is: [logging, clientId-enforcement,errorTraits]
+    body:
+      application/json:
+        type: customerType
+        example: !include examples/customerExample.raml      
+    responses:
+      201:
+        body:
+          application/json:
+            type: successResponse
+            example: |
+              {"message": "Successfully Created"}
+  /{customerId}:
+    uriParameters:
+      customerId:
+        example: 1
+        type: number
+        format: int
+    get:
+      displayName: Get Customer Details based on customer Id
+      is: [logging, clientId-enforcement,errorTraits]      
+      responses:
+        "200":
+          body:
+            application/json:
+              type: customerType
+              example: !include examples/customerExample.raml
+    put:
+      displayName: Update Customer Details
+      description: Update Customer Details
+      is: [logging, clientId-enforcement,errorTraits]
+      body:
+        application/json:
+          type: customerType
+          example: !include examples/customerExample.raml      
+      responses:
+        204:
