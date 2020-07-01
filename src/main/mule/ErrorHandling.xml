@@ -7,21 +7,33 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 http://www.mulesoft.org/schema/mule/sockets http://www.mulesoft.org/schema/mule/sockets/current/mule-sockets.xsd
 http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
 	<error-handler name="ErrorHandlingError_Handler" doc:id="3850b15c-cee3-47cd-828c-6be5b50f326a" >
-		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="e39e9d10-8135-45ae-b8fe-4324e30495a9" type="DB:CONNECTIVITY">
-			<set-variable value="500" doc:name="Set Variable" doc:id="180c15e9-1131-4bc5-a386-aaad409f7761" variableName="Database Connectivity"/>
-			<flow-ref doc:name="Flow Reference" doc:id="0567844c-22c0-4cae-8e0a-49396760bbae" name="ErrorHandlingSub_Flow"/>
-		</on-error-continue>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a552e798-46ec-4d04-a782-82658765d6f6" type="DB:BAD_SQL_SYNTAX">
-			<set-variable value="500" doc:name="Set Variable" doc:id="c227c4d4-5400-4125-a153-fd45d821c6b6" variableName="Database Bad SQL"/>
+			<set-variable value="500" doc:name="Set Variable" doc:id="c227c4d4-5400-4125-a153-fd45d821c6b6" variableName="httpStatus"/>
 			<flow-ref doc:name="Flow Reference" doc:id="d1b20f1f-c077-47a8-b152-7a62f6d3c786" name="ErrorHandlingSub_Flow"/>
 		</on-error-propagate>
-		<on-error-continue enableNotifications="true" logException="true" doc:name="On Error Continue" doc:id="7cc87997-bbfb-4e38-b730-b7721b20db06" type="DB:QUERY_EXECUTION">
-			<set-variable value="" doc:name="Set Variable" doc:id="d3fe2b9f-2296-454f-8a79-13c1f6f9a30b" variableName="DB Query Execution"/>
-			<flow-ref doc:name="Flow Reference" doc:id="bfd550ff-2a7f-4096-8704-005ae01b5f11" name="ErrorHandlingSub_Flow"/>
-		</on-error-continue>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2d8a223a-9c2e-46a9-b703-b838e8c9e2ba" type="STREAM_MAXIMUM_SIZE_EXCEEDED">
-			<set-variable value="" doc:name="Set Variable" doc:id="23116bea-82c6-47a1-a925-1d3da64edd83" variableName="DB stream size exceeded"/>
-			<flow-ref doc:name="Flow Reference" doc:id="51936dcd-6009-4f78-84d1-db1832edb065" name="ErrorHandlingSub_Flow"/>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d87febc9-aaac-4121-b313-8fb5ab499a6e" type="ACCOUNT:NOT_FOUND">
+			<set-variable value="400" doc:name="Set Variable" doc:id="22caf631-99b4-4f00-a484-e48af84d98ee" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="59f7b7ee-d9f6-4e00-96b0-17a175c3adec" name="ErrorHandlingSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d55fdb01-1da2-41d9-9158-14a18804f649" type="DB:QUERY_EXECUTION">
+			<set-variable value="400" doc:name="Set Variable" doc:id="86f91406-d3d3-4502-928e-80c10f9fa792" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="15b40ac5-a995-4f56-8b29-a63b1c1741bd" name="ErrorHandlingSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="cf33f9d2-e815-4554-b273-689bd2d33602" type="EXPRESSION">
+			<set-variable value="400" doc:name="Set Variable" doc:id="b04f4cca-e46f-469c-af82-226916e53622" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="427bd9c2-b99b-4cd9-819d-da41ca99ce16" name="ErrorHandlingSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2d21e0c5-9e6a-4de0-99b3-62db98129bad" type="STREAM_MAXIMUM_SIZE_EXCEEDED">
+			<set-variable value="400" doc:name="Set Variable" doc:id="cbf0738d-7912-4de7-9dd1-afd51a34b40c" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="0941dbe0-cb93-4a8b-ad23-041762be0e50" name="ErrorHandlingSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="89e23942-a7a0-485e-aa82-ec464408d8c1" type="ACCOUNT:NOT_FOUND">
+			<set-variable value="400" doc:name="Set Variable" doc:id="0defcdde-8fc6-4e0a-addf-58b53c6675b0" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="e35231a4-f5ad-4266-8dc1-424bd786f2a0" name="ErrorHandlingSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2d8a223a-9c2e-46a9-b703-b838e8c9e2ba" type="DB:CONNECTIVITY">
+			<set-variable value="500" doc:name="Set Variable" doc:id="23116bea-82c6-47a1-a925-1d3da64edd83" variableName="httpStatus" />
+			<flow-ref doc:name="Flow Reference" doc:id="51936dcd-6009-4f78-84d1-db1832edb065" name="ErrorHandlingSub_Flow" />
 		</on-error-propagate>
 	</error-handler>
 	<sub-flow name="ErrorHandlingSub_Flow" doc:id="ca3116dc-7d0f-419d-8980-6b38a614004b" >
@@ -32,8 +44,8 @@ output application/json
 ---
 {
 	errorCode: vars.httpStatus,
-	errorMessage: vars.errorMessage,
-	errorType: vars.errorType
+	errorMessage: error.description,
+	errorType: error.'type'
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>

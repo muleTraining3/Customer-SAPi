@@ -1,0 +1,10 @@
+database:
+  host: "den1.mssql6.gear.host"
+  port: "1433"
+  userName: "customer4"
+  password: "Ff4B!!8P901h"
+  databaseName: "orders"
+  
+http:
+  port: "8081"
+  host:  "0.0.0.0"     

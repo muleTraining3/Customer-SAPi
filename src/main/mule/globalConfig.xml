@@ -1,6 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+<mule xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+
+
+	<configuration-properties doc:name="Configuration properties" doc:id="2b411429-8086-4294-9acd-b618eee099cb" file="local.yaml" />
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="f095c28b-b9de-446f-982e-9cbcfa5e19b6" >
+		<db:mssql-connection host="${database.host}" port="${database.port}" user="${database.userName}" password="${database.password}"/>
+	</db:config>
+	<configuration doc:name="Configuration" doc:id="cc31a7ea-a772-4a84-a88e-8e5e80de1670" defaultErrorHandler-ref="ErrorHandlingError_Handler" />
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d769c3fd-85f7-4404-a8ef-80ebb863ebee" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	
+	<http:listener-config name="customer-httpListenerConfig">
+        <http:listener-connection host="0.0.0.0" port="8082" />
+    </http:listener-config>
+    <apikit:config name="customer-config" api="customer.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" parser="RAML"/>
+    
+
 </mule>
