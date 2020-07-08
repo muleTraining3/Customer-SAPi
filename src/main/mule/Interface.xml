@@ -6,14 +6,15 @@
     <flow name="customer-main">
         <http:listener config-ref="customer-httpListenerConfig" path="/api/*">
             <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:response>
             <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="customer-config" />
+        <flow-ref doc:name="Flow Reference" doc:id="9c317a9e-e198-478a-b58b-87fe1191db15" name="get:\customers:customer-config"/>
+		<apikit:router config-ref="customer-config" />
         <error-handler>
             <on-error-propagate type="APIKIT:BAD_REQUEST">
                 <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
@@ -131,21 +132,22 @@ output application/json
         <logger level="INFO" message="put:\customers\(customerId):application\json:customer-config" />
     </flow>
     <flow name="get:\customers:customer-config">
-        <flow-ref doc:name="Flow Reference" doc:id="853cbbcf-3e0f-4092-b324-296564f958a4" name="get:\customers:customer-config" />
+        <flow-ref doc:name="Flow Reference" doc:id="853cbbcf-3e0f-4092-b324-296564f958a4" name="ImplementationFlow" />
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
-  firstName: "testName",
-  emailId: "test@mail.com",
-  lastName: "testLastName",
-  customerId: 1,
-  phoneNumber: "+91999999999"
+"firstName":payload.firstName,
+"emailID":payload.emailID,
+"lastName":payload.testLastName,
+"customerId": payload.customerId,
+"phoneNumber":payload.phoneNumber,
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+        
     </flow>
     <flow name="get:\customers\(customerId):customer-config">
         <ee:transform xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core">

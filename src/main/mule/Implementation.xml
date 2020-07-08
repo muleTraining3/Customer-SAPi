@@ -8,9 +8,9 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 
 	<flow name="ImplementationFlow" doc:id="110be77e-5cac-4b69-9218-6d7993a43ec6" >
-		<http:listener doc:name="Listener" doc:id="a2d159d9-b625-44b4-9f46-09465083b6ce" config-ref="HTTP_Listener_config" path="/abc"/>
+		<set-variable value="" doc:name="Set Variable" doc:id="98a8c718-84eb-4fe2-85fd-8fef00a3e5e7" variableName="requestPayload" />
 		<db:select doc:name="Select" doc:id="a8c4a549-00e6-405f-a47f-6b7a54497b89" config-ref="Database_Config">
-			<db:sql ><![CDATA[select * from customer where emailID='sreejaya0007@gmail.com';
+			<db:sql ><![CDATA[select * from customer where emailID='sreejaya007@gmail.com';
 ]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{
 'emailID': "attributes.queryparams.emailID"
@@ -27,20 +27,14 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-{
-"firstName":payload.firstName,
-"emailId":payload.emailId,
-"lastName":payload.testLastName,
-"customerId": payload.customerId,
-"phoneNumber":payload.phoneNumber,
-}]]></ee:set-payload>
+payload]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 			</otherwise>
 		</choice>
-		<logger level="INFO" doc:name="Logger" doc:id="53e9f200-a886-4927-a94c-511452031e76" message="#[payload]"/>
-		<error-handler>
-			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="88e63653-038a-41ab-bcdc-31b60a126935" when="sizeOf(payload == 0)">
+		<logger level="INFO" doc:name="Logger" doc:id="53e9f200-a886-4927-a94c-511452031e76" message="#[payload]" />
+		<error-handler name="ErrorHandlingError_Handler" doc:id="08f9c2d1-7844-43b5-90ea-eea22608c281">
+			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="88e63653-038a-41ab-bcdc-31b60a126935" when="sizeOf(payload == 0)" type="ANY">
 				<logger level="INFO" doc:name="Logger" doc:id="6496a5b1-afb8-46d6-8eed-2f7be03f4961" message="No customer present with the provided email address"/>
 			</on-error-propagate>
 		</error-handler>

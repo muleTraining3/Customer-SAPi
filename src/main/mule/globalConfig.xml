@@ -15,14 +15,17 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 		<db:mssql-connection host="${database.host}" port="${database.port}" user="${database.userName}" password="${database.password}"/>
 	</db:config>
 	<configuration doc:name="Configuration" doc:id="cc31a7ea-a772-4a84-a88e-8e5e80de1670" defaultErrorHandler-ref="ErrorHandlingError_Handler" />
-	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="d769c3fd-85f7-4404-a8ef-80ebb863ebee" >
-		<http:listener-connection host="0.0.0.0" port="8081" />
-	</http:listener-config>
 	
 	<http:listener-config name="customer-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8082" />
+        <http:listener-connection host="0.0.0.0" port="8081" />
     </http:listener-config>
-    <apikit:config name="customer-config" api="customer.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" parser="RAML"/>
+    <apikit:config name="customer-config" api="customer.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" parser="RAML">
+		<apikit:flow-mappings >
+			<apikit:flow-mapping resource="/customers" action="get" content-type="application/json" flow-ref="get:\customers:customer-config" />
+		</apikit:flow-mappings>
+	</apikit:config>
+
     
+
 
 </mule>

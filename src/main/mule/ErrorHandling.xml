@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:validation="http://www.mulesoft.org/schema/mule/validation" xmlns:sockets="http://www.mulesoft.org/schema/mule/sockets"
-	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:validation="http://www.mulesoft.org/schema/mule/validation"
+	xmlns:sockets="http://www.mulesoft.org/schema/mule/sockets"
+	xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
 http://www.mulesoft.org/schema/mule/sockets http://www.mulesoft.org/schema/mule/sockets/current/mule-sockets.xsd
-http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd">
+http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mule/validation/current/mule-validation.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
 	<error-handler name="ErrorHandlingError_Handler" doc:id="3850b15c-cee3-47cd-828c-6be5b50f326a" >
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a552e798-46ec-4d04-a782-82658765d6f6" type="DB:BAD_SQL_SYNTAX">
-			<set-variable value="500" doc:name="Set Variable" doc:id="c227c4d4-5400-4125-a153-fd45d821c6b6" variableName="httpStatus"/>
+			<set-variable value="400" doc:name="Set Variable" doc:id="c227c4d4-5400-4125-a153-fd45d821c6b6" variableName="httpStatus"/>
 			<flow-ref doc:name="Flow Reference" doc:id="d1b20f1f-c077-47a8-b152-7a62f6d3c786" name="ErrorHandlingSub_Flow"/>
 		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d87febc9-aaac-4121-b313-8fb5ab499a6e" type="ACCOUNT:NOT_FOUND">
@@ -27,13 +28,29 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 			<set-variable value="400" doc:name="Set Variable" doc:id="cbf0738d-7912-4de7-9dd1-afd51a34b40c" variableName="httpStatus"/>
 			<flow-ref doc:name="Flow Reference" doc:id="0941dbe0-cb93-4a8b-ad23-041762be0e50" name="ErrorHandlingSub_Flow"/>
 		</on-error-propagate>
-		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="89e23942-a7a0-485e-aa82-ec464408d8c1" type="ACCOUNT:NOT_FOUND">
-			<set-variable value="400" doc:name="Set Variable" doc:id="0defcdde-8fc6-4e0a-addf-58b53c6675b0" variableName="httpStatus"/>
-			<flow-ref doc:name="Flow Reference" doc:id="e35231a4-f5ad-4266-8dc1-424bd786f2a0" name="ErrorHandlingSub_Flow"/>
-		</on-error-propagate>
 		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2d8a223a-9c2e-46a9-b703-b838e8c9e2ba" type="DB:CONNECTIVITY">
 			<set-variable value="500" doc:name="Set Variable" doc:id="23116bea-82c6-47a1-a925-1d3da64edd83" variableName="httpStatus" />
 			<flow-ref doc:name="Flow Reference" doc:id="51936dcd-6009-4f78-84d1-db1832edb065" name="ErrorHandlingSub_Flow" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="2a6ab201-8839-40ee-b5cb-aecee5b4edef" type="APIKIT:BAD_REQUEST">
+			<set-variable value="400" doc:name="Set Variable" doc:id="d0e3d3a7-432e-469f-98a5-577c9b294a24" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="97f21f59-747d-40f2-86e5-321e90a23682" name="ErrorHandlingSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c73842f8-9bed-4e90-95b7-c57806cdf920" type="APIKIT:METHOD_NOT_ALLOWED">
+			<set-variable value="400" doc:name="Set Variable" doc:id="c6482fdf-c8d0-44a1-b3cd-524e816011b4" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="f574e848-b132-4a4f-8c0c-67298f0c20d7" name="ErrorHandlingSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c5f524c7-0231-4ea3-8159-233393d673b0" type="APIKIT:NOT_ACCEPTABLE">
+			<set-variable value="400" doc:name="Set Variable" doc:id="2da1108f-e7ec-4f7e-ac87-6319c49c42a4" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="250ca825-1a5a-46db-abcf-69a00405ec8b" name="ErrorHandlingSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="83872af5-b77b-434b-a615-a43d66fcecb7" type="APIKIT:NOT_FOUND">
+			<set-variable value="400" doc:name="Set Variable" doc:id="4e0bfb19-a12d-43e4-a2d3-52d6c7557bb4" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="5335ab27-2158-4d83-a383-25027be87c12" name="ErrorHandlingSub_Flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1ee798c1-4584-4a96-946d-dbc0652d3787" type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+			<set-variable value="400" doc:name="Set Variable" doc:id="6700fe38-215f-4115-b6b9-997b9c01aafe" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="bc8bbed1-060f-47d6-b928-71a16693c574" name="ErrorHandlingSub_Flow"/>
 		</on-error-propagate>
 	</error-handler>
 	<sub-flow name="ErrorHandlingSub_Flow" doc:id="ca3116dc-7d0f-419d-8980-6b38a614004b" >
@@ -43,9 +60,10 @@ http://www.mulesoft.org/schema/mule/validation http://www.mulesoft.org/schema/mu
 output application/json
 ---
 {
-	errorCode: vars.httpStatus,
-	errorMessage: error.description,
-	errorType: error.'type'
+	"error-code": vars.httpStatus,
+	"error-type": if(error.errorType != null) error.errorType.namespace as String ++ ":" ++ error.errorType.identifier as String  else "Error",
+	"error-message": if(error.description != null and error.description != '') error.description else "Error",
+	"error_timestamp": now() as String {format: "yyyy-MM-dd'T'HH:mm:ss"} 
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
