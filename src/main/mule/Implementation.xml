@@ -8,22 +8,16 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 
 	<flow name="ImplementationFlow" doc:id="110be77e-5cac-4b69-9218-6d7993a43ec6" >
-		<ee:transform doc:name="Transform Message" doc:id="2f06792d-c837-4cb7-9362-4709c9f7c11b" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
-output application/json
----
-payload]]></ee:set-payload>
-			</ee:message>
-		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="7c3fb471-cec1-4f88-a13a-b74164e75d12" message="Payload to DB"/>
 		<db:select doc:name="Select" doc:id="a8c4a549-00e6-405f-a47f-6b7a54497b89" config-ref="Database_Config">
-			<db:sql ><![CDATA[select * from customer where emailID = :emailID
+			<db:sql ><![CDATA[select * from customer where emailid = :email_id
 
 ]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{
-'emailID' : attributes.queryparams."emailId"
+"email_id" : attributes.queryParams.emailId
 }]]]></db:input-parameters>
 		</db:select>
+		<logger level="INFO" doc:name="Logger" doc:id="f7158b11-5aad-4438-a271-5ac615678e0a" message="Payload from DB"/>
 		<choice doc:name="Choice" doc:id="9c8af25a-234a-4d4b-8ee6-f3cf8ee7285d" >
 			<when expression="#[sizeOf(payload) == 0]">
 				<raise-error doc:name="Raise error" doc:id="7a8598d5-ea53-4760-8442-41e0dfb37f74" type="ACCOUNT:NOT_FOUND" description="Customer not found with the provided email ID"/>
