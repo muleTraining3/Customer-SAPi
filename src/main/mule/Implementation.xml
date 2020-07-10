@@ -8,11 +8,20 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 
 	<flow name="ImplementationFlow" doc:id="110be77e-5cac-4b69-9218-6d7993a43ec6" >
+		<ee:transform doc:name="Transform Message" doc:id="2f06792d-c837-4cb7-9362-4709c9f7c11b" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
 		<db:select doc:name="Select" doc:id="a8c4a549-00e6-405f-a47f-6b7a54497b89" config-ref="Database_Config">
 			<db:sql ><![CDATA[select * from customer where emailID = :emailID
+
 ]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{
-"emailID": attributes.queryparams."emailID"
+'emailID' : attributes.queryparams."emailId"
 }]]]></db:input-parameters>
 		</db:select>
 		<choice doc:name="Choice" doc:id="9c8af25a-234a-4d4b-8ee6-f3cf8ee7285d" >
