@@ -135,11 +135,11 @@ output application/json
 output application/json
 ---
 {
-"firstName":payload.firstName,
-"emailID":payload.emailID,
-"lastName":payload.testLastName,
-"customerId": payload.customerId,
-"phoneNumber":payload.phoneNumber,
+ "firstName":payload.firstName,
+ "emailID":payload.emailID,
+ "lastName":payload.lastName,
+ "customerId": payload.customerId,
+ "phoneNumber":payload.phoneNumber
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>

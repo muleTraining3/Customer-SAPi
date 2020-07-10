@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="reqjson" format="json">
+      <types:shape format="weave" example="examples/customerExample-1.json"><![CDATA[%dw 2.0
+
+type reqjson = {|
+  firstName: String, 
+  emailId: String, 
+  lastName: String, 
+  customerId: Number {"typeId": "int"}, 
+  phoneNumber: String
+|} {"example": "{\\\"firstName\\\":\\\"testName\\\",\\\"emailId\\\":\\\"test@mail.com\\\",\\\"lastName\\\":\\\"testLastName\\\",\\\"customerId\\\":1,\\\"phoneNumber\\\":\\\"+91999999999\\\"}"}
+
+]]></types:shape>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#21b5656b-55f4-4f14-85b6-cb08de43e0be">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="reqjson"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="reqjson"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>

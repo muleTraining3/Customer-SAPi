@@ -29,16 +29,17 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-payload]]></ee:set-payload>
+{
+ "firstName":payload.firstName,
+ "emailID":payload.emailID,
+ "lastName":payload.lastName,
+ "customerId": payload.custID,
+ "phoneNumber":payload.phoneNo
+}]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 			</otherwise>
 		</choice>
 		<logger level="INFO" doc:name="Logger" doc:id="53e9f200-a886-4927-a94c-511452031e76" message="#[payload]" />
-		<error-handler name="ErrorHandlingError_Handler" doc:id="08f9c2d1-7844-43b5-90ea-eea22608c281">
-			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="88e63653-038a-41ab-bcdc-31b60a126935" when="sizeOf(payload == 0)" type="ANY">
-				<logger level="INFO" doc:name="Logger" doc:id="6496a5b1-afb8-46d6-8eed-2f7be03f4961" message="No customer present with the provided email address"/>
-			</on-error-propagate>
-		</error-handler>
 	</flow>
 </mule>
