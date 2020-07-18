@@ -52,11 +52,15 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
 			<set-variable value="400" doc:name="Set Variable" doc:id="6700fe38-215f-4115-b6b9-997b9c01aafe" variableName="httpStatus"/>
 			<flow-ref doc:name="Flow Reference" doc:id="bc8bbed1-060f-47d6-b928-71a16693c574" name="ErrorHandlingSub_Flow"/>
 		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="0925829f-818f-4a13-97a8-966793a43ddb" type="ACCOUNT:CUSTOMER_ALREADY_EXISTS">
+			<set-variable value="409" doc:name="Set Variable" doc:id="90cfadab-2798-4792-8512-4eeb36c3460b" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="a58834b9-fd06-4a3d-95bf-e606c5dc3fa3" name="ErrorHandlingSub_Flow"/>
+		</on-error-propagate>
 	</error-handler>
-	<sub-flow name="ErrorHandlingSub_Flow" doc:id="ca3116dc-7d0f-419d-8980-6b38a614004b" >
-		<ee:transform doc:name="Transform Message" doc:id="9faf0499-be06-427d-9eee-9015ea9c31a2" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+	<sub-flow name="ErrorHandlingSub_Flow" doc:id="ca3116dc-7d0f-419d-8980-6b38a614004b">
+		<ee:transform doc:name="Transform Message" doc:id="9faf0499-be06-427d-9eee-9015ea9c31a2">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {

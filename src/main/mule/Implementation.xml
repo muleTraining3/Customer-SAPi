@@ -42,4 +42,38 @@ output application/json
 		</choice>
 		<logger level="INFO" doc:name="Logger" doc:id="53e9f200-a886-4927-a94c-511452031e76" message="#[payload]" />
 	</flow>
+	<flow name="createCustomer(Post)" doc:id="e873e2ca-d204-4cba-bf89-eb182583ff5b" >
+		<logger level="INFO" doc:name="Logger" doc:id="043db97b-4fa5-40c6-b8e5-f1e5599c4257" message="Start of Create customer Flow"/>
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="de4ea007-3e3e-41f3-9fb8-afeaae4ef4fe" variableName="customerPayload"/>
+		<logger level="INFO" doc:name="Logger" doc:id="74b00504-f42f-458d-b88a-e0c5bc95fd1a" message="Check whether customer already exists in the system"/>
+		<db:select doc:name="Select" doc:id="9f9f02ff-f571-4df7-ac13-46e1995521f2" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from customer where custID  = :custid]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	custid : payload.customerId
+	
+	}]]]></db:input-parameters>
+		</db:select>
+		<choice doc:name="Check customer exists" doc:id="56164042-be13-4f24-9486-2fe95a16f5fc" >
+			<when expression="sizeOf(payload) &gt; 0">
+				<raise-error doc:name="Raise error" doc:id="8be2eca0-f5c3-459d-9b52-4e6264f4aba3" type="ACCOUNT:CUSTOMER_ALREADY_EXISTS" description="Customer exists in the system"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="6227ecf5-883b-4ba5-86a5-22bfe315d7b4" message="Inserting record into the database"/>
+				<db:insert doc:name="Insert" doc:id="76943f0d-9294-479e-8457-0a7e781d6fe7" config-ref="Database_Config">
+			<db:sql><![CDATA[insert into customer (firstName, lastName, emailID, custID, phoneNo) values ( :firstname, :lastname, :emailid, :custid, :phoneno)]]></db:sql>
+			<db:input-parameters><![CDATA[#[{   
+	firstname : vars.customerPayload.firstName,
+	lastname : vars.customerPayload.lastName,
+	emailid	: vars.customerPayload.emailId,
+	custid : vars.customerPayload.customerId,
+	phoneno : vars.customerPayload.phoneNumber	
+}]]]></db:input-parameters>
+		</db:insert>
+				<set-payload value='#[{
+"message" : "Customer record created successfully"
+}]' doc:name="Set Payload" doc:id="1a8c7b65-52ab-47c1-adbc-38728414256d" />
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="401aad87-b681-41b7-8d0b-1ca83dd39ed5" message="Record inserted successfully" />
+	</flow>
 </mule>
