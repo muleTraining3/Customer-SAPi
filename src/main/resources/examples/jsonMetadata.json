@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "firstname": "abc",
+      "lastname": "asdfc",
+      "id": 1,
+      "occupation": "doctor"
+    },
+    {
+      "firstname": "xyz",
+      "lastname": "abcvc",
+      "id": 2,
+      "occupation": "enginner"
+    },
+    {
+      "firstname": "234",
+      "lastname": "abc98",
+      "id": 3,
+      "occupation": "scientist"
+    }
+  ]
+}

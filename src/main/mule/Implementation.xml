@@ -8,14 +8,16 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 
 	<flow name="ImplementationFlow" doc:id="110be77e-5cac-4b69-9218-6d7993a43ec6" >
-		<set-variable value="" doc:name="Set Variable" doc:id="98a8c718-84eb-4fe2-85fd-8fef00a3e5e7" variableName="requestPayload" />
+		<logger level="INFO" doc:name="Logger" doc:id="7c3fb471-cec1-4f88-a13a-b74164e75d12" message="Payload to DB"/>
 		<db:select doc:name="Select" doc:id="a8c4a549-00e6-405f-a47f-6b7a54497b89" config-ref="Database_Config">
-			<db:sql ><![CDATA[select * from customer where emailID='sreejaya007@gmail.com';
+			<db:sql ><![CDATA[select * from customer where emailid = :email_id
+
 ]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{
-'emailID': "attributes.queryparams.emailID"
+"email_id" : attributes.queryParams.emailId
 }]]]></db:input-parameters>
 		</db:select>
+		<logger level="INFO" doc:name="Logger" doc:id="f7158b11-5aad-4438-a271-5ac615678e0a" message="Payload from DB"/>
 		<choice doc:name="Choice" doc:id="9c8af25a-234a-4d4b-8ee6-f3cf8ee7285d" >
 			<when expression="#[sizeOf(payload) == 0]">
 				<raise-error doc:name="Raise error" doc:id="7a8598d5-ea53-4760-8442-41e0dfb37f74" type="ACCOUNT:NOT_FOUND" description="Customer not found with the provided email ID"/>
@@ -27,16 +29,51 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
-payload]]></ee:set-payload>
+{
+ "firstName":payload.firstName,
+ "emailID":payload.emailID,
+ "lastName":payload.lastName,
+ "customerId": payload.custID,
+ "phoneNumber":payload.phoneNo
+}]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 			</otherwise>
 		</choice>
 		<logger level="INFO" doc:name="Logger" doc:id="53e9f200-a886-4927-a94c-511452031e76" message="#[payload]" />
-		<error-handler name="ErrorHandlingError_Handler" doc:id="08f9c2d1-7844-43b5-90ea-eea22608c281">
-			<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="88e63653-038a-41ab-bcdc-31b60a126935" when="sizeOf(payload == 0)" type="ANY">
-				<logger level="INFO" doc:name="Logger" doc:id="6496a5b1-afb8-46d6-8eed-2f7be03f4961" message="No customer present with the provided email address"/>
-			</on-error-propagate>
-		</error-handler>
+	</flow>
+	<flow name="createCustomer(Post)" doc:id="e873e2ca-d204-4cba-bf89-eb182583ff5b" >
+		<logger level="INFO" doc:name="Logger" doc:id="043db97b-4fa5-40c6-b8e5-f1e5599c4257" message="Start of Create customer Flow"/>
+		<set-variable value="#[payload]" doc:name="Set Variable" doc:id="de4ea007-3e3e-41f3-9fb8-afeaae4ef4fe" variableName="customerPayload"/>
+		<logger level="INFO" doc:name="Logger" doc:id="74b00504-f42f-458d-b88a-e0c5bc95fd1a" message="Check whether customer already exists in the system"/>
+		<db:select doc:name="Select" doc:id="9f9f02ff-f571-4df7-ac13-46e1995521f2" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from customer where custID  = :custid]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	custid : payload.customerId
+	
+	}]]]></db:input-parameters>
+		</db:select>
+		<choice doc:name="Check customer exists" doc:id="56164042-be13-4f24-9486-2fe95a16f5fc" >
+			<when expression="sizeOf(payload) &gt; 0">
+				<raise-error doc:name="Raise error" doc:id="8be2eca0-f5c3-459d-9b52-4e6264f4aba3" type="ACCOUNT:CUSTOMER_ALREADY_EXISTS" description="Customer exists in the system"/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="6227ecf5-883b-4ba5-86a5-22bfe315d7b4" message="Inserting record into the database"/>
+				<db:insert doc:name="Insert" doc:id="76943f0d-9294-479e-8457-0a7e781d6fe7" config-ref="Database_Config">
+			<db:sql><![CDATA[insert into customer (firstName, lastName, emailID, custID, phoneNo) values ( :firstname, :lastname, :emailid, :custid, :phoneno)]]></db:sql>
+			<db:input-parameters><![CDATA[#[{   
+	firstname : vars.customerPayload.firstName,
+	lastname : vars.customerPayload.lastName,
+	emailid	: vars.customerPayload.emailId,
+	custid : vars.customerPayload.customerId,
+	phoneno : vars.customerPayload.phoneNumber	
+}]]]></db:input-parameters>
+		</db:insert>
+				<set-payload value='#[{
+"message" : "Customer record created successfully"
+}]' doc:name="Set Payload" doc:id="1a8c7b65-52ab-47c1-adbc-38728414256d" />
+			</otherwise>
+		</choice>
+		<logger level="INFO" doc:name="Logger" doc:id="401aad87-b681-41b7-8d0b-1ca83dd39ed5" message="Record inserted successfully" />
 	</flow>
 </mule>
