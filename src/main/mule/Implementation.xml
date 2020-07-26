@@ -20,8 +20,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<logger level="INFO" doc:name="Logger" doc:id="f7158b11-5aad-4438-a271-5ac615678e0a" message="Payload from DB"/>
 		<choice doc:name="Choice" doc:id="9c8af25a-234a-4d4b-8ee6-f3cf8ee7285d" >
 			<when expression="#[sizeOf(payload) == 0]">
-				<raise-error doc:name="Raise error" doc:id="7a8598d5-ea53-4760-8442-41e0dfb37f74" type="ACCOUNT:NOT_FOUND" description="Customer not found with the provided email ID"/>
-				<logger level="INFO" doc:name="Logger" doc:id="4b22e02d-1bd4-4d69-935e-f718cec1af14" message="No Customer found with the given email ID"/>
+				<set-payload value="#[payload]" doc:name="Set Payload" doc:id="364b3e29-1f26-46a3-b303-8503cf20c61d" />
+				<raise-error doc:name="Raise error" doc:id="bba269fc-960e-4622-a541-39f8998942b1" type="ACCOUNT:NOT_FOUND" description="Customer not found with provided email address"/>
 			</when>
 			<otherwise >
 				<ee:transform doc:name="Transform Message" doc:id="21b5656b-55f4-4f14-85b6-cb08de43e0be">
