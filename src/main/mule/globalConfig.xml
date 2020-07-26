@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
-	xmlns:db="http://www.mulesoft.org/schema/mule/db"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
 
 
 	<configuration-properties doc:name="Configuration properties" doc:id="2b411429-8086-4294-9acd-b618eee099cb" file="local.yaml" />
 	<db:config name="Database_Config" doc:name="Database Config" doc:id="f095c28b-b9de-446f-982e-9cbcfa5e19b6" >
-		<db:mssql-connection host="${database.host}" port="${database.port}" user="${database.userName}" password="${database.password}"/>
+		<db:mssql-connection host="${secure::database.host}" port="${secure::database.port}" user="${secure::database.userName}" password="${secure::database.password}"/>
 	</db:config>
 	<configuration doc:name="Configuration" doc:id="cc31a7ea-a772-4a84-a88e-8e5e80de1670" defaultErrorHandler-ref="ErrorHandlingError_Handler" />
 	
@@ -24,6 +25,9 @@ http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/htt
 			<apikit:flow-mapping resource="/customers" action="get" content-type="application/json" flow-ref="get:\customers:customer-config" />
 		</apikit:flow-mappings>
 	</apikit:config>
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="5464ed2e-983b-4dc1-9a67-3b20e519e68e" file="${mule.env}.yaml" key="${secret.key}" >
+		<secure-properties:encrypt algorithm="Blowfish" mode="ECB" />
+	</secure-properties:config>
 
  
 

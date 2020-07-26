@@ -148,28 +148,10 @@ output application/json
         </ee:transform>
     </flow>
     <flow name="get:\customers\(customerId):customer-config">
-        <ee:transform>
-            <ee:variables>
-                <ee:set-variable variableName="customerId">attributes.uriParams.'customerId'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform xsi:schemaLocation="http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  firstName: "testName",
-  emailId: "test@mail.com",
-  lastName: "testLastName",
-  customerId:1,
-  phoneNumber: "+91999999999"
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="getCustomerByID" doc:id="16dae228-9b5b-4707-b7c3-d3c8967491e3" name="getCustomerByCustomerID"/>
     </flow>
     <flow name="post:\customers:application\json:customer-config">
-		<flow-ref doc:name="Flow Reference" doc:id="b805b200-4d7c-45a5-b0da-f83407b90e59" name="createCustomer(Post)"/>
+		<flow-ref doc:name="createCustomer" doc:id="b805b200-4d7c-45a5-b0da-f83407b90e59" name="createCustomer(Post)"/>
 		<ee:transform doc:name="Transform Message" doc:id="0bfc9535-ae3a-4ad5-886e-b82ef43f366a" >
 			<ee:message >
 				<ee:set-payload ><![CDATA[%dw 2.0

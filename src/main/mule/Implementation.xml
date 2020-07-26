@@ -20,8 +20,8 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<logger level="INFO" doc:name="Logger" doc:id="f7158b11-5aad-4438-a271-5ac615678e0a" message="Payload from DB"/>
 		<choice doc:name="Choice" doc:id="9c8af25a-234a-4d4b-8ee6-f3cf8ee7285d" >
 			<when expression="#[sizeOf(payload) == 0]">
-				<raise-error doc:name="Raise error" doc:id="7a8598d5-ea53-4760-8442-41e0dfb37f74" type="ACCOUNT:NOT_FOUND" description="Customer not found with the provided email ID"/>
-				<logger level="INFO" doc:name="Logger" doc:id="4b22e02d-1bd4-4d69-935e-f718cec1af14" message="No Customer found with the given email ID"/>
+				<set-payload value="#[payload]" doc:name="Set Payload" doc:id="364b3e29-1f26-46a3-b303-8503cf20c61d" />
+				<raise-error doc:name="Raise error" doc:id="bba269fc-960e-4622-a541-39f8998942b1" type="ACCOUNT:NOT_FOUND" description="Customer not found with provided email address"/>
 			</when>
 			<otherwise >
 				<ee:transform doc:name="Transform Message" doc:id="21b5656b-55f4-4f14-85b6-cb08de43e0be">
@@ -75,5 +75,40 @@ output application/json
 			</otherwise>
 		</choice>
 		<logger level="INFO" doc:name="Logger" doc:id="401aad87-b681-41b7-8d0b-1ca83dd39ed5" message="Record inserted successfully" />
+	</flow>
+	<flow name="getCustomerByCustomerID" doc:id="aae463e3-0dc9-45aa-b524-08920a37f2c1" >
+		<logger level="INFO" doc:name="Logger" doc:id="c4af2de4-3f51-4c75-b0d5-997e9d99b8a7" message="Start the getCustomerByCustomerID Flow"/>
+		<set-variable value="#[attributes.uriParams.customerId]" doc:name="Set Customer Id to variable" doc:id="85a8395f-1600-4b77-af2b-a4ad2786189e" variableName="customerId"/>
+		<db:select doc:name="Select" doc:id="7e9821fe-3548-4620-b13d-0d083a783d52" config-ref="Database_Config">
+			<db:sql ><![CDATA[select * from customer where custID = :custid]]></db:sql>
+			<db:input-parameters ><![CDATA[#[{
+	custid: vars.customerId
+	
+}]]]></db:input-parameters>
+		</db:select>
+		<logger level="INFO" doc:name="Logger" doc:id="b8a7250f-1273-40b8-88cf-1ff95d8611fe" message="Record from Select query : payload"/>
+		<choice doc:name="Choice" doc:id="d469cec9-e771-4759-8db8-4baf5a3feab1" >
+			<when expression="sizeOf(payload) == 0">
+				<raise-error doc:name="Raise error" doc:id="de068cc7-aa6d-4cda-9780-465661ccc52e" type="ACCOUNT:NOT_FOUND" description='#[ output application/json --- " Customer not found for the customer id ( $(vars.customerId) )" ]'/>
+			</when>
+			<otherwise >
+				<logger level="INFO" doc:name="Logger" doc:id="978eb57c-1d09-48d4-8be5-3df6fde0f061" message="Start - Transform the oracle record"/>
+				<ee:transform doc:name="Transform Message" doc:id="e09febd7-51cc-4c77-9cc8-93507909fc4f">
+					<ee:message>
+						<ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+ "firstName":payload[0].firstName,
+ "emailID":payload[0].emailID,
+ "lastName":payload[0].lastName,
+ "customerId": payload[0].custID,
+ "phoneNumber":payload[0].phoneNo
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+				<logger level="INFO" doc:name="Logger" doc:id="dc4aa59b-d878-4a22-b43c-c08928de6a23" message="End - Transform the oracle record"/>
+			</otherwise>
+		</choice>
 	</flow>
 </mule>
