@@ -1,10 +1,6 @@
 database:
-  host: "![zDU+7m8azsQz2BLyhTzrnd62cYli/MFs]"
-  port: "![nuzrCMkybfk=]"
-  userName: "![YFE1R9dH7LfsuVH+HsNKEQ==]"
-  password: "![3uBCyGZaQnShmgS87fIC3w==]"
-  databaseName: "![IoqJBnGKtSs=]"
-  
-http:
-  port: "![70B+Xs9ViX0=]"
-  host:  "![rlt3Knngclg=]"     
+  host: "![282kywhAyCRda5X7KRy9b8VhokaE5OHk]"
+  port: "![cFauExrksmY=]"
+  userName: "![9cWHKwq2UupSkgCFzJaMCw==]"
+  password: "![baHaMtZYja8arxuZMijddw==]"   
+    

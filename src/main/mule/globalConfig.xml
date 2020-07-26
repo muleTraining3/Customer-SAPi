@@ -25,7 +25,7 @@ http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/sc
 			<apikit:flow-mapping resource="/customers" action="get" content-type="application/json" flow-ref="get:\customers:customer-config" />
 		</apikit:flow-mappings>
 	</apikit:config>
-	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="5464ed2e-983b-4dc1-9a67-3b20e519e68e" file="${mule.env}.yaml" key="${secret.key}" >
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="5464ed2e-983b-4dc1-9a67-3b20e519e68e" file="${mule.env}.yaml" key="SJ#@*(&amp;%DJ(Gr)" >
 		<secure-properties:encrypt algorithm="Blowfish" mode="ECB" />
 	</secure-properties:config>
 
