@@ -6,10 +6,6 @@
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
-
-	<db:config name="Database_Config1" doc:name="Database Config" doc:id="d5c704b4-f374-4582-bddc-efabe2501534" >
-		<db:mssql-connection host="den1.mssql6.gear.host" port="1433" user="customer4" password="Ff4B!!8P901h" />
-	</db:config>
 	<flow name="ImplementationFlow" doc:id="110be77e-5cac-4b69-9218-6d7993a43ec6" >
 		<logger level="INFO" doc:name="Logger" doc:id="7c3fb471-cec1-4f88-a13a-b74164e75d12" message="Payload to DB"/>
 		<db:select doc:name="Select" doc:id="a8c4a549-00e6-405f-a47f-6b7a54497b89" config-ref="Database_Config">
@@ -116,7 +112,7 @@ output application/json
 	</flow>
 	<flow name="UpdateCustomerDetailsPutFlow" doc:id="e95e97ad-66f9-4af9-aed1-5a71c77c156c" >
 		<logger level="INFO" doc:name="Logger" doc:id="641cf744-fad8-43c4-8515-dfb23b876f55" message="---- Update Customer details based on the Customer ID ---- "/>
-		<db:update doc:name="Update Customer Details based on Customer ID" doc:id="76f4e9e7-946b-47d4-9659-77c080b76eb8" config-ref="Database_Config1">
+		<db:update doc:name="Update Customer Details based on Customer ID" doc:id="76f4e9e7-946b-47d4-9659-77c080b76eb8" config-ref="Database_Config">
 			<db:sql ><![CDATA[Update customer SET firstName =:FirstName, emailID =:EmailID, lastName =:LastName, 
 custID =:CustId, phoneNo =:PhoneNum  where custID = :CustId]]></db:sql>
 			<db:input-parameters ><![CDATA[#[{
