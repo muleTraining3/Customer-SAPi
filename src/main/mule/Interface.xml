@@ -123,12 +123,8 @@ output application/json
         </error-handler>
     </flow>
     <flow name="put:\customers\(customerId):application\json:customer-config">
-        <ee:transform>
-            <ee:variables>
-                <ee:set-variable variableName="customerId">attributes.uriParams.'customerId'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <logger level="INFO" message="put:\customers\(customerId):application\json:customer-config" />
+        <flow-ref doc:name="Flow Reference" doc:id="84adc7b6-a43a-4449-bdbf-d103879ffaff" name="UpdateCustomerDetailsPutFlow"/>
+		<logger level="INFO" message="Updated Customer Details" />
     </flow>
     <flow name="get:\customers:customer-config">
         <flow-ref doc:name="Flow Reference" doc:id="853cbbcf-3e0f-4092-b324-296564f958a4" name="ImplementationFlow" />
